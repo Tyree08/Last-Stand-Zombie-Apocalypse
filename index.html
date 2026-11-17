@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Last Stand: Zombie Apocalypse</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background:
+                linear-gradient(rgba(5, 12, 8, 0.88),
+                rgba(5, 12, 8, 0.95)),
+                radial-gradient(circle at center, #263c2b, #080d09);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        header {
+            padding: 25px 0;
+            border-bottom: 1px solid #405342;
+        }
+
+        .logo {
+            color: #a6d96a;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 20px 70px;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 7vw, 75px);
+            color: #b5e47c;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px #527d36;
+        }
+
+        .subtitle {
+            color: #c4cbbf;
+            margin-top: 15px;
+            font-size: 18px;
+            letter-spacing: 3px;
+        }
+
+        .description {
+            max-width: 700px;
+            margin: 25px auto;
+            line-height: 1.7;
+            color: #c6cec3;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        button {
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding: 16px 25px;
+            width: 260px;
+            border: 1px solid #8dbb5b;
+            background: #253b26;
+            color: white;
+            transition: 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #527d36;
+            transform: scale(1.04);
+            box-shadow: 0 0 15px #527d36;
+        }
+
+        button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .primary {
+            background: #638c3c;
+            color: white;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 65px 0;
+        }
+
+        .info-card {
+            background: rgba(35, 53, 36, 0.75);
+            border: 1px solid #405342;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .info-card h3 {
+            color: #b5e47c;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #c4cbbf;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #788576;
+            border-top: 1px solid #405342;
+        }
+
+        /* Popup window */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #17251a;
+            border: 1px solid #8dbb5b;
+            padding: 35px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(100, 150, 70, 0.25);
+        }
+
+        .modal-content h2 {
+            color: #b5e47c;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            color: #d0d8cd;
+            line-height: 1.7;
+            white-space: pre-line;
+            margin-bottom: 25px;
+        }
+
+        .modal-content button {
+            width: 180px;
+        }
+
+        @media (max-width: 650px) {
+            .hero {
+                padding-top: 65px;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">LAST STAND</div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+
+            <h1>Last Stand</h1>
+
+            <div class="subtitle">
+                ZOMBIE APOCALYPSE
+            </div>
+
+            <p class="description">
+                The world has fallen. Cities are abandoned, survivors
+                are disappearing, and mutated zombies are taking over.
+                You are a military soldier fighting to survive.
+                Complete missions, collect supplies, and discover
+                what caused the outbreak.
+            </p>
+
+            <div class="menu">
+
+                <button
+                    id="startButton"
+                    class="primary">
+                    START NEW GAME
+                </button>
+
+                <button id="continueButton" disabled>
+                    CONTINUE GAME
+                </button>
+
+                <button id="settingsButton">
+                    SETTINGS
+                </button>
+
+                <button id="controlsButton">
+                    CONTROLS
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="info">
+
+            <div class="info-card">
+                <h3>5 MISSIONS</h3>
+                <p>
+                    Explore abandoned cities, hospitals,
+                    and military bases.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h3>3 DIFFICULTIES</h3>
+                <p>
+                    Choose Easy, Normal, or Hard
+                    difficulty.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h3>YOUR LAST STAND</h3>
+                <p>
+                    Fight to survive and face the
+                    final boss.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        LAST STAND: ZOMBIE APOCALYPSE
+        <br><br>
+        Survive the outbreak. Complete your mission.
+    </footer>
+
+    <!-- Popup Window -->
+
+    <div class="modal" id="gameModal">
+
+        <div class="modal-content">
+
+            <h2 id="modalTitle">
+                MISSION BRIEFING
+            </h2>
+
+            <p id="modalText">
+                Welcome, soldier.
+            </p>
+
+            <button id="closeModal" class="primary">
+                CLOSE
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Connect JavaScript -->
+
+    <script src="script.js"></script>
+
+</body>
+</html>
