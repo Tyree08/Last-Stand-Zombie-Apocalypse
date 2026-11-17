@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101713">
+  <title>Last Stand: Zombie Apocalypse</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #101713;
+      --panel: rgba(13, 20, 17, .88);
+      --panel-border: rgba(210, 225, 207, .16);
+      --text: #edf1e9;
+      --muted: #a7b1a5;
+      --green: #a7c77a;
+      --green-bright: #c7e59a;
+      --red: #c65b4e;
+      --font-display: "Barlow Condensed", Impact, sans-serif;
+      --font-body: Inter, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+    button, select, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .scene {
+      min-height: 100vh;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(5,10,8,.96) 0%, rgba(5,10,8,.78) 43%, rgba(5,10,8,.22) 100%),
+        linear-gradient(0deg, rgba(5,9,7,.9), transparent 45%),
+        radial-gradient(ellipse at 75% 38%, rgba(119,139,99,.25), transparent 35%),
+        linear-gradient(135deg, #26352b 0%, #17221b 48%, #0c120f 100%);
+    }
+    .scene::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      opacity: .42;
+      background:
+        linear-gradient(90deg, transparent 0 12%, #0a100d 12% 14%, transparent 14% 28%, #0a100d 28% 31%, transparent 31% 100%),
+        linear-gradient(0deg, #090f0c 0 18%, transparent 18% 100%);
+      clip-path: polygon(35% 18%, 100% 0, 100% 100%, 22% 100%);
+    }
+    .scene::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 42vw;
+      height: 82vh;
+      right: 4vw;
+      bottom: -8vh;
+      opacity: .22;
+      background: linear-gradient(90deg, transparent 0 20%, #030705 20% 25%, transparent 25% 45%, #030705 45% 50%, transparent 50%),
+                  linear-gradient(0deg, #030705 0 20%, transparent 20%);
+      clip-path: polygon(10% 18%, 35% 0, 62% 13%, 100% 8%, 100% 100%, 0 100%);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px clamp(20px, 5vw, 72px);
+      border-bottom: 1px solid rgba(255,255,255,.09);
+      background: rgba(5, 10, 7, .28);
+      backdrop-filter: blur(8px);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 38px; height: 38px;
+      display: grid; place-items: center;
+      border: 1px solid var(--green);
+      color: var(--green-bright);
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 22px;
+      transform: skew(-7deg);
+    }
+    .brand-name {
+      font: 700 18px var(--font-display);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .brand-sub { color: var(--muted); font-size: 9px; letter-spacing: 2.5px; margin-top: 2px; }
+    .status { color: var(--green); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+    .status::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-right: 9px; box-shadow: 0 0 12px var(--green); }
+
+    main {
+      width: min(1180px, 100%);
+      min-height: calc(100vh - 88px);
+      margin: auto;
+      padding: clamp(42px, 8vh, 90px) clamp(20px, 5vw, 72px) 36px;
+      display: flex;
+      align-items: center;
+    }
+    .content { width: min(590px, 100%); }
+    .eyebrow {
+      color: var(--green-bright);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font: 800 clamp(58px, 9vw, 108px)/.82 var(--font-display);
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      margin: 0;
+      text-shadow: 0 5px 28px rgba(0,0,0,.5);
+    }
+    h1 span { color: var(--green-bright); display: block; }
+    .tagline {
+      max-width: 440px;
+      color: #c4cdc1;
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 25px 0 30px;
+    }
+    .menu {
+      width: min(350px, 100%);
+      display: grid;
+      gap: 10px;
+    }
+    .menu-button {
+      position: relative;
+      min-height: 49px;
+      padding: 0 18px;
+      border: 1px solid rgba(205,220,198,.27);
+      color: var(--text);
+      background: rgba(12,19,15,.72);
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      font: 600 15px var(--font-display);
+      transition: .18s ease;
+    }
+    .menu-button::before {
+      content: "";
+      display: inline-block;
+      width: 7px; height: 7px;
+      margin-right: 13px;
+      border: 1px solid var(--green);
+      transform: rotate(45deg);
+    }
+    .menu-button:hover:not(:disabled), .menu-button:focus-visible {
+      outline: none;
+      border-color: var(--green-bright);
+      color: var(--green-bright);
+      background: rgba(81,105,64,.24);
+      transform: translateX(5px);
+    }
+    .menu-button.primary {
+      color: #10170f;
+      border-color: var(--green-bright);
+      background: var(--green-bright);
+    }
+    .menu-button.primary::before { border-color: #10170f; }
+    .menu-button.primary:hover { color: #080d09; background: #d8f3b0; }
+    .menu-button:disabled { opacity: .38; cursor: not-allowed; }
+    .menu-button:disabled:hover { transform: none; }
+    .menu-note { color: #89958a; font-size: 10px; letter-spacing: 1px; margin-top: 8px; }
+
+    .mission-strip {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(255,255,255,.13);
+      margin-top: 35px;
+      padding-top: 18px;
+    }
+    .stat-label { color: #89958a; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+    .stat-value { color: #e1e8dc; font: 600 17px var(--font-display); letter-spacing: 1px; margin-top: 4px; }
+
+    .footer {
+      position: absolute;
+      bottom: 18px;
+      right: clamp(20px, 5vw, 72px);
+      color: rgba(220,230,216,.48);
+      font-size: 9px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(7px);
+    }
+    .modal-backdrop.open { display: grid; }
+    .modal {
+      width: min(540px, 100%);
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 27px;
+      border: 1px solid var(--panel-border);
+      background: #121b15;
+      box-shadow: 0 24px 80px rgba(0,0,0,.55);
+    }
+    .modal-top { display: flex; justify-content: space-between; align-items: start; gap: 15px; }
+    .modal h2 { margin: 0 0 8px; font: 700 32px var(--font-display); letter-spacing: 1.5px; text-transform: uppercase; }
+    .modal p { color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .close {
+      width: 34px; height: 34px;
+      border: 1px solid var(--panel-border);
+      color: var(--text); background: transparent; font-size: 20px;
+    }
+    .close:hover { border-color: var(--green); color: var(--green-bright); }
+    .field { display: grid; gap: 8px; margin: 18px 0; }
+    .field label { color: var(--green-bright); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    .field select, .field input[type="range"] {
+      width: 100%;
+      accent-color: var(--green);
+    }
+    .field select {
+      padding: 12px;
+      color: var(--text);
+      border: 1px solid var(--panel-border);
+      background: #1a261e;
+    }
+    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+    .modal-actions .menu-button { flex: 1; min-width: 150px; text-align: center; }
+    .modal-actions .menu-button::before { display: none; }
+    .objective-list { padding-left: 18px; color: #c5cec2; font-size: 13px; line-height: 1.9; }
+    .callout {
+      padding: 12px 14px;
+      border-left: 2px solid var(--green);
+      background: rgba(167,199,122,.08);
+      color: #c8d3c3;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 18px;
+    }
+    .hidden { display: none !important; }
+
+    @media (max-width: 620px) {
+      .topbar { padding: 17px 20px; }
+      .status { font-size: 8px; letter-spacing: 1px; }
+      main { min-height: calc(100vh - 73px); align-items: flex-start; padding-top: 68px; }
+      .tagline { font-size: 13px; }
+      .footer { position: static; text-align: center; padding: 0 15px 16px; }
+      .mission-strip { gap: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">LS</div>
+        <div>
+          <div class="brand-name">Last Stand</div>
+          <div class="brand-sub">Survival Operations</div>
+        </div>
+      </div>
+      <div class="status">Campaign interface</div>
+    </header>
+
+    <main>
+      <section class="content" aria-labelledby="game-title">
+        <div class="eyebrow">Operation: Last Light // 01</div>
+        <h1 id="game-title">Last <span>Stand</span></h1>
+        <p class="tagline">The outbreak has taken the city. Your unit is gone. Stay alert, conserve your supplies, and make every decision count.</p>
+
+        <nav class="menu" aria-label="Main menu">
+          <button class="menu-button primary" id="newGameButton">Start New Game</button>
+          <button class="menu-button" id="continueButton" disabled>Continue Game</button>
+          <button class="menu-button" id="settingsButton">Settings</button>
+          <button class="menu-button" id="controlsButton">Controls</button>
+        </nav>
+        <div class="menu-note" id="continueNote">No saved campaign found on this browser.</div>
+
+        <div class="mission-strip">
+          <div><div class="stat-label">Campaign</div><div class="stat-value">5 Missions</div></div>
+          <div><div class="stat-label">Mode</div><div class="stat-value">Single Player</div></div>
+          <div><div class="stat-label">Threat Level</div><div class="stat-value">Critical</div></div>
+        </div>
+      </section>
+    </main>
+    <div class="footer">A single-player survival experience</div>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <section class="modal">
+      <div class="modal-top">
+        <div>
+          <div class="eyebrow" id="modalEyebrow">System</div>
+          <h2 id="modalTitle">Settings</h2>
+        </div>
+        <button class="close" id="closeModal" aria-label="Close dialog">×</button>
+      </div>
+      <div id="modalContent"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
